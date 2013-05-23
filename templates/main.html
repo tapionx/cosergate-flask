@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+		<title>Cosergate, e i conti tornano</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2" style="background-color:red"> <!--Sidebar-->
+					<h3>Cosergate, e i conti tornano!</h3>
+				</div>
+				<div class="span10"> <!--Body-->
+					<div class="row-fluid text-center">
+					{% for user in users %}
+						<div style="background-color:yellow; display:inline-block; margin:0 2%;">
+							<p>{{ user.name }} {{ user.surname }}</p>
+							<img class="img-rounded" height="100px" width="100px" src="http://cdn1.iconfinder.com/data/icons/PRACTIKA/256/twitter.png">
+							<div class="input-append">
+								<input class="input-mini" type="text" value="{{ user.balance }}" readonly>
+								<span class="add-on">&euro;</span>
+							</div>
+						</div>
+					{% endfor %}
+					</div>
+					<div class="row-fluid">
+						<div class="span10 controls-row">
+							<form method="POST" action="/new_spending">
+								<div class="row-fluid">
+									<legend>Nuova spesa</legend>
+									<select>
+										{% for user in users %}
+											<option>{{ user.name }}</option>
+										{% endfor %}
+									</select>
+
+									<input type="text" name="store" placeholder="Negozio" />
+									<input type="text" name="description" placeholder="Descrizione spesa" />
+									<input type="datetime-local" name="data" placeholder="Data" />
+								</div>
+								<div class="row-fluid">
+									<input type="text" name="p[1][name]" placeholder="nome" />
+									{% for user in users %}
+										<input type="checkbox" name="p[1][user][1]" value="yes"/>
+									{% endfor %}
+									<input type="text" name="p[1][quantity]" placeholder="quantita" />
+									<input type="text" name="p[1][amount]" placeholder="costo" />
+									<input type="text" name="p[1][description]" placeholder="descrizione" />
+								</div>
+								<input type="hidden" name="nproducts" value="2"/>
+									<input class="btn" type="submit" name="Invia"/>
+							</form>
+						</div>
+					</div>
+					<div class="row-fluid" style="height:300px; overflow:auto">
+						{% for spending in spendings %}
+						<div class="row-fluid">
+							<div class="span10">
+								<legend>Spesa</legend>
+								<ul class="inline">
+									<li>{{ spending.description }}</li>
+									<li>{{ spending.store }}</li>
+									<li>{{ spending.date }}</li>
+									<li>{{ spending.user }}</li>
+								</ul>
+								<table class="table table-hover table-striped">
+									<thead>
+										<tr>
+											<th>Prodotto</th>
+											<th>Descrizione</th>
+											{% for user in users %}
+												<th>{{ user.name }}</th>
+											{% endfor %}
+											<th>Costo</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for product in spending.products %}
+											<tr>
+												<td>{{ product.name }}</td>
+												<td>{{ product.description }}</td>
+												{% for user in users %}
+													<td>Si</td>
+												{% endfor %}
+												<td>{{ product.amount }}</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+									<tfoot>
+										<tr>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th>Totale: 1234</th>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<script src="/static/bootstrapjs/bootstrap.min.js"></script>
+	</body>
+</html>

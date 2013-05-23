@@ -1,4 +1,4 @@
 cosergate
 =========
 
-Easily share money with your roomates
+Easily share your money with your roomates
